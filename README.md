@@ -1,4 +1,4 @@
-# -Project1
+# Multimedia Systems and Applications-Project1
 
 project1 for Multimedia Systems and Applications. 
 
