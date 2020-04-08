@@ -3,13 +3,15 @@ close all
 clc
 load handel.mat
 
-[y, fs] = audioread('sample.m4a');
-%[y, fs] = audioread('house_lo.mp3')
+[y, fs] = audioread('sample.wav');
+y = y(:,2);
+%two channel right and left
+%depend on the input device you use
 time = (1:length(y))/fs;
 
-subplot(2,1,1); %waveform
+figure('Name','waveform');
 plot(time,y);
-xlabel('second');
+xlabel('Time(s)');
 ylabel('magnitude');
 
 %====================================================================
@@ -29,9 +31,9 @@ for i=1:frameNum
 end
 zcr = zcr.'; %transpose
 time_zcr = (1:length(zcr))*(length(y)/length(zcr)/frameSize);
-subplot(2,1,2); %Energy
+figure('Name','Zero-crossing rate')
 plot(time_zcr, zcr); %zero crossing rate
-xlabel('second');
+xlabel('Time(s)');
 ylabel('ZCR');
 %===============================================================
 %Energy
@@ -42,23 +44,21 @@ for i=1:frameNum
     en(i) = sum(curFrame(1:end-1).*curFrame(2:end));
 end
 time_en = (1:length(en))*(length(y)/length(en)/fs);
-figure();
+figure('Name','Enegy');
 plot(time_en, en);
-xlabel('second');
+xlabel('Time(s)');
 ylabel('Energy');
 %===========================================================
-%end point
-f0 = pitch(y,fs); %Audio tool box required
-figure();
-plot(f0);
-
-idx=detectSpeech(y,fs)
-figure()
-plot(y)
-hold on
-xline(idx(1))
-xline(idx(2))
-hold off
+%ref:
+%https://www.mathworks.com/help/audio/ref/pitch.html
+[f0, idx_p] = pitch(y,fs); %Audio tool box required
+figure('Name','Pitch');
+plot(idx_p, f0);
+%========================================================
+%ref:
+%https://www.mathworks.com/help/audio/ref/detectspeech.html
+figure('Name','end point');
+detectSpeech(y,fs);
 
 p = audioplayer(y, fs);
 %play(p)
