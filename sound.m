@@ -30,7 +30,7 @@ for i=1:frameNum
     zcr(i) = sum(curFrame(1:end-1).*curFrame(2:end)<0);
 end
 zcr = zcr.'; %transpose
-time_zcr = (1:length(zcr))*(length(y)/length(zcr)/frameSize);
+time_zcr = (1:length(zcr))*frameSize/fs;
 figure('Name','Zero-crossing rate')
 plot(time_zcr, zcr); %zero crossing rate
 xlabel('Time(s)');
@@ -53,7 +53,10 @@ ylabel('Energy');
 %https://www.mathworks.com/help/audio/ref/pitch.html
 [f0, idx_p] = pitch(y,fs); %Audio tool box required
 figure('Name','Pitch');
-plot(idx_p, f0);
+time_p = idx_p/fs;
+plot(time_p, f0);
+xlabel('Time(s)')
+ylabel('Frequecy(Hz)');
 %========================================================
 %ref:
 %https://www.mathworks.com/help/audio/ref/detectspeech.html
